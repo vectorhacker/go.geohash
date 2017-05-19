@@ -154,7 +154,7 @@ func (b Box) Neighbors() []*Box {
 	return []*Box{up, down, left, right, upleft, downleft, upright, downright}
 }
 
-
+// String returns the geohash of the box
 func (b Box) String() string {
 	return b.hash
 }
