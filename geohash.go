@@ -22,70 +22,6 @@ type Box struct {
 	minLat, minLon float64
 }
 
-func (b Box) String() string {
-	return b.hash
-}
-
-// Lat returns the latitude of a box
-func (b Box) Lat() float64 {
-	return (b.minLat + b.maxLat) / 2
-}
-
-// Lon returns the longitude of a box
-func (b Box) Lon() float64 {
-	return (b.minLon + b.maxLon) / 2
-}
-
-// MaxLat returns the maximum latitude for a box
-func (b Box) MaxLat() float64 {
-	return b.maxLat
-}
-
-// MinLat returns the minimum latitude for a box
-func (b Box) MinLat() float64 {
-	return b.minLat
-}
-
-// MaxLon returns the maximum longitude for a box
-func (b Box) MaxLon() float64 {
-	return b.maxLon
-}
-
-// MinLon returns the minimum longitude for a box
-func (b Box) MinLon() float64 {
-	return b.minLon
-}
-
-// Height Calculates the height of a box
-func (b Box) Height() float64 {
-	return b.MaxLat() - b.MinLat()
-}
-
-// Width calculates the width of a box
-func (b Box) Width() float64 {
-	return b.MaxLon() - b.MinLon()
-}
-
-// Neighbors calculates the 8 neighbors of a box
-func (b Box) Neighbors() []*Box {
-
-	var (
-		// Directly adjecent
-		up    = Encode(b.Lat()+b.Height(), b.Lon(), b.pres)
-		down  = Encode(b.Lat()-b.Height(), b.Lon(), b.pres)
-		left  = Encode(b.Lat(), b.Lon()-b.Width(), b.pres)
-		right = Encode(b.Lat(), b.Lon()+b.Width(), b.pres)
-
-		// Corners
-		upleft    = Encode(b.Lat()+b.Height(), b.Lon()-b.Width(), b.pres)
-		downleft  = Encode(b.Lat()-b.Height(), b.Lon()-b.Width(), b.pres)
-		upright   = Encode(b.Lat()+b.Height(), b.Lon()+b.Width(), b.pres)
-		downright = Encode(b.Lat()-b.Height(), b.Lon()+b.Width(), b.pres)
-	)
-
-	return []*Box{up, down, left, right, upleft, downleft, upright, downright}
-}
-
 // Decode creates a new box from an initial hash
 func Decode(hash string, pres int) *Box {
 
@@ -178,4 +114,47 @@ func Encode(lat, lon float64, pres int) *Box {
 	}
 
 	return &Box{hash: hash, maxLat: lat1, minLat: lat0, maxLon: lon1, minLon: lon0}
+}
+
+// Lat returns the latitude of a box
+func (b Box) Lat() float64 {
+	return (b.minLat + b.maxLat) / 2
+}
+
+// Lon returns the longitude of a box
+func (b Box) Lon() float64 {
+	return (b.minLon + b.maxLon) / 2
+}
+
+func (b Box) height() float64 {
+	return b.maxLat - b.minLat
+}
+
+func (b Box) width() float64 {
+	return b.maxLon - b.minLon
+}
+
+// Neighbors calculates the 8 neighbors of a box
+func (b Box) Neighbors() []*Box {
+
+	var (
+		// Directly adjecent
+		up    = Encode(b.Lat()+b.height(), b.Lon(), b.pres)
+		down  = Encode(b.Lat()-b.height(), b.Lon(), b.pres)
+		left  = Encode(b.Lat(), b.Lon()-b.width(), b.pres)
+		right = Encode(b.Lat(), b.Lon()+b.width(), b.pres)
+
+		// Corners
+		upleft    = Encode(b.Lat()+b.height(), b.Lon()-b.width(), b.pres)
+		downleft  = Encode(b.Lat()-b.height(), b.Lon()-b.width(), b.pres)
+		upright   = Encode(b.Lat()+b.height(), b.Lon()+b.width(), b.pres)
+		downright = Encode(b.Lat()-b.height(), b.Lon()+b.width(), b.pres)
+	)
+
+	return []*Box{up, down, left, right, upleft, downleft, upright, downright}
+}
+
+
+func (b Box) String() string {
+	return b.hash
 }
