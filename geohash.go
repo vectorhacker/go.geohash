@@ -71,23 +71,23 @@ func (b Box) Neighbors() []*Box {
 
 	var (
 		// Directly adjecent
-		up    = Encode(b.Lat()+b.Height(), b.Lon(), &b.pres)
-		down  = Encode(b.Lat()-b.Height(), b.Lon(), &b.pres)
-		left  = Encode(b.Lat(), b.Lon()-b.Width(), &b.pres)
-		right = Encode(b.Lat(), b.Lon()+b.Width(), &b.pres)
+		up    = Encode(b.Lat()+b.Height(), b.Lon(), b.pres)
+		down  = Encode(b.Lat()-b.Height(), b.Lon(), b.pres)
+		left  = Encode(b.Lat(), b.Lon()-b.Width(), b.pres)
+		right = Encode(b.Lat(), b.Lon()+b.Width(), b.pres)
 
 		// Corners
-		upleft    = Encode(b.Lat()+b.Height(), b.Lon()-b.Width(), &b.pres)
-		downleft  = Encode(b.Lat()-b.Height(), b.Lon()-b.Width(), &b.pres)
-		upright   = Encode(b.Lat()+b.Height(), b.Lon()+b.Width(), &b.pres)
-		downright = Encode(b.Lat()-b.Height(), b.Lon()+b.Width(), &b.pres)
+		upleft    = Encode(b.Lat()+b.Height(), b.Lon()-b.Width(), b.pres)
+		downleft  = Encode(b.Lat()-b.Height(), b.Lon()-b.Width(), b.pres)
+		upright   = Encode(b.Lat()+b.Height(), b.Lon()+b.Width(), b.pres)
+		downright = Encode(b.Lat()-b.Height(), b.Lon()+b.Width(), b.pres)
 	)
 
 	return []*Box{up, down, left, right, upleft, downleft, upright, downright}
 }
 
 // Decode creates a new box from an initial hash
-func Decode(hash string, pres *int) *Box {
+func Decode(hash string, pres int) *Box {
 
 	refine := func(i0, i1 float64, cd, mask int) (float64, float64) {
 		if cd&mask == 0 {
@@ -100,8 +100,8 @@ func Decode(hash string, pres *int) *Box {
 	}
 
 	p := 12
-	if *pres > 0 {
-		p = *pres
+	if pres > 0 {
+		p = pres
 	}
 
 	isEven := true
@@ -132,11 +132,11 @@ func Decode(hash string, pres *int) *Box {
 }
 
 // Encode takes coordinates and makes a geohash box
-func Encode(lat, lon float64, pres *int) *Box {
+func Encode(lat, lon float64, pres int) *Box {
 	hash := ""
 	precision := 12
-	if *pres != 0 {
-		precision = *pres
+	if pres > 0 {
+		precision = pres
 	}
 
 	isEven := true

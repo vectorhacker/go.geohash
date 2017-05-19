@@ -9,7 +9,7 @@ package main
 import "github.com/vectorhacker/geohash"
 
 func main() {
-  box := geohash.Encode(46.7666, -101.4650, nil)
+  box := geohash.Encode(46.7666, -101.4650, 0) // 0 is the same as full presicion
 
   boxes := box.Neighbors()
 

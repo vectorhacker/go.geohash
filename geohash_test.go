@@ -35,7 +35,7 @@ func TestEncode(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		b := Encode(test.Input.Lat, test.Input.Lon, &test.Input.Pres)
+		b := Encode(test.Input.Lat, test.Input.Lon, test.Input.Pres)
 
 		if b.String() != test.Expected {
 			t.Fatalf("Expected %s got back %s", test.Expected, b)
@@ -95,7 +95,7 @@ func TestBoxDecode(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		b := Decode(test.Input.Hash, &test.Input.Pres)
+		b := Decode(test.Input.Hash, test.Input.Pres)
 		if dif := math.Abs(b.Lat() - test.Expected.Lat); dif > test.Tolerance {
 			t.Fatalf("Expected %f, %f got %f, %f", test.Expected.Lat, test.Expected.Lon, b.Lat(), b.Lon())
 		}
@@ -161,7 +161,7 @@ func TestBoxNeighbors(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			b := Decode(
 				tt.input.hash,
-				&tt.input.pres,
+				tt.input.pres,
 			)
 
 			got := b.Neighbors()
