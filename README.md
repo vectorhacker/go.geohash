@@ -1,0 +1,2 @@
+GeoHash algororithm in Go
+=====
