@@ -43,7 +43,7 @@ func Decode(hash string, pres int) *Box {
 	isEven := true
 	lat0, lat1 := minlat, maxlat
 	lon0, lon1 := minlon, maxlon
-	latErr, lonErr := 90.0, 180.0
+	latErr, lonErr := maxlat, maxlon
 
 	for i := 0; i < len(hash); i++ {
 		c := hash[i]
@@ -136,21 +136,26 @@ func (b Box) Width() float64 {
 	return b.maxLon - b.minLon
 }
 
+// Precision returns the precision of a box
+func (b Box) Precision() int {
+	return b.pres
+}
+
 // Neighbors calculates the 8 neighbors of a box
 func (b Box) Neighbors() []*Box {
 
 	var (
 		// Directly adjecent
-		up    = Encode(b.Lat()+b.Height(), b.Lon(), b.pres)
-		down  = Encode(b.Lat()-b.Height(), b.Lon(), b.pres)
-		left  = Encode(b.Lat(), b.Lon()-b.Width(), b.pres)
-		right = Encode(b.Lat(), b.Lon()+b.Width(), b.pres)
+		up    = Encode(b.Lat()+b.Height(), b.Lon(), b.Precision())
+		down  = Encode(b.Lat()-b.Height(), b.Lon(), b.Precision())
+		left  = Encode(b.Lat(), b.Lon()-b.Width(), b.Precision())
+		right = Encode(b.Lat(), b.Lon()+b.Width(), b.Precision())
 
 		// Corners
-		upleft    = Encode(b.Lat()+b.Height(), b.Lon()-b.Width(), b.pres)
-		downleft  = Encode(b.Lat()-b.Height(), b.Lon()-b.Width(), b.pres)
-		upright   = Encode(b.Lat()+b.Height(), b.Lon()+b.Width(), b.pres)
-		downright = Encode(b.Lat()-b.Height(), b.Lon()+b.Width(), b.pres)
+		upleft    = Encode(b.Lat()+b.Height(), b.Lon()-b.Width(), b.Precision())
+		downleft  = Encode(b.Lat()-b.Height(), b.Lon()-b.Width(), b.Precision())
+		upright   = Encode(b.Lat()+b.Height(), b.Lon()+b.Width(), b.Precision())
+		downright = Encode(b.Lat()-b.Height(), b.Lon()+b.Width(), b.Precision())
 	)
 
 	return []*Box{up, down, left, right, upleft, downleft, upright, downright}

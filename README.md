@@ -1,4 +1,4 @@
-GeoHash algororithm in Go
+GeoHash Algororithm in Go
 =====
 
 Example
