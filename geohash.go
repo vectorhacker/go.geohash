@@ -25,14 +25,14 @@ type Box struct {
 // Decode creates a new box from an initial hash
 func Decode(hash string, pres int) *Box {
 
-	refine := func(i0, i1 float64, cd, mask int) (float64, float64) {
+	refine := func(minInterval, maxInterval float64, cd, mask int) (float64, float64) {
 		if cd&mask == 0 {
-			i1 = (i0 + i1) / 2
+			maxInterval = (minInterval + maxInterval) / 2
 		} else {
-			i0 = (i0 + i1) / 2
+			minInterval = (minInterval + maxInterval) / 2
 		}
 
-		return i0, i1
+		return minInterval, maxInterval
 	}
 
 	p := 12
@@ -126,11 +126,13 @@ func (b Box) Lon() float64 {
 	return (b.minLon + b.maxLon) / 2
 }
 
-func (b Box) height() float64 {
+// Height returns the height of the box
+func (b Box) Height() float64 {
 	return b.maxLat - b.minLat
 }
 
-func (b Box) width() float64 {
+// Width returns the width of the box
+func (b Box) Width() float64 {
 	return b.maxLon - b.minLon
 }
 
@@ -139,16 +141,16 @@ func (b Box) Neighbors() []*Box {
 
 	var (
 		// Directly adjecent
-		up    = Encode(b.Lat()+b.height(), b.Lon(), b.pres)
-		down  = Encode(b.Lat()-b.height(), b.Lon(), b.pres)
-		left  = Encode(b.Lat(), b.Lon()-b.width(), b.pres)
-		right = Encode(b.Lat(), b.Lon()+b.width(), b.pres)
+		up    = Encode(b.Lat()+b.Height(), b.Lon(), b.pres)
+		down  = Encode(b.Lat()-b.Height(), b.Lon(), b.pres)
+		left  = Encode(b.Lat(), b.Lon()-b.Width(), b.pres)
+		right = Encode(b.Lat(), b.Lon()+b.Width(), b.pres)
 
 		// Corners
-		upleft    = Encode(b.Lat()+b.height(), b.Lon()-b.width(), b.pres)
-		downleft  = Encode(b.Lat()-b.height(), b.Lon()-b.width(), b.pres)
-		upright   = Encode(b.Lat()+b.height(), b.Lon()+b.width(), b.pres)
-		downright = Encode(b.Lat()-b.height(), b.Lon()+b.width(), b.pres)
+		upleft    = Encode(b.Lat()+b.Height(), b.Lon()-b.Width(), b.pres)
+		downleft  = Encode(b.Lat()-b.Height(), b.Lon()-b.Width(), b.pres)
+		upright   = Encode(b.Lat()+b.Height(), b.Lon()+b.Width(), b.pres)
+		downright = Encode(b.Lat()-b.Height(), b.Lon()+b.Width(), b.pres)
 	)
 
 	return []*Box{up, down, left, right, upleft, downleft, upright, downright}
