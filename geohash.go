@@ -1,6 +1,6 @@
 // Package geohash is a simple implementation of the Public Domain Geohash algorithm.
 // It represents the hashes using boxes which contain the resulting hashes and can reverse the box,
-// using the geohash and the precision to recreate it at.
+// using the geohash and the precision to recreate it.
 package geohash
 
 import (
