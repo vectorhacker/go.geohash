@@ -1,3 +1,6 @@
+// Package geohash is a simple implementation of the Public Domain Geohash algorithm.
+// It represents the hashes using boxes which contain the resulting hashes and can reverse the box,
+// using the geohash and the precision to recreate it at.
 package geohash
 
 import (
@@ -14,7 +17,8 @@ const (
 
 var bits = []int{16, 8, 4, 2, 1}
 
-// Box represents a coordinate box
+// Box represents a coordinate box. It knows it's width and height, and can figure out it's neighbors.
+// It implements the Stringer interface, printing out the geohash value.
 type Box struct {
 	hash           string
 	pres           int
@@ -141,7 +145,7 @@ func (b Box) Precision() int {
 	return b.pres
 }
 
-// Neighbors calculates the 8 neighbors of a box
+// Neighbors calculates the 8 neighboring boxes of a box
 func (b Box) Neighbors() []*Box {
 
 	var (
@@ -163,5 +167,11 @@ func (b Box) Neighbors() []*Box {
 
 // String returns the geohash of the box
 func (b Box) String() string {
+	return b.hash
+}
+
+
+// Hash returns the geohash
+func (b Box) Hash() string {
 	return b.hash
 }
