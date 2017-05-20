@@ -27,7 +27,7 @@ type Box struct {
 }
 
 // Decode creates a new box from an initial hash
-func Decode(hash string, pres int) *Box {
+func Decode(hash string) *Box {
 
 	refine := func(minInterval, maxInterval float64, cd, mask int) (float64, float64) {
 		if cd&mask == 0 {
@@ -39,10 +39,7 @@ func Decode(hash string, pres int) *Box {
 		return minInterval, maxInterval
 	}
 
-	p := 12
-	if pres > 0 {
-		p = pres
-	}
+	p := len(hash)
 
 	isEven := true
 	lat0, lat1 := minlat, maxlat

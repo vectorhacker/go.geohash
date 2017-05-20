@@ -49,7 +49,6 @@ func TestBoxDecode(t *testing.T) {
 
 	type input struct {
 		Hash string
-		Pres int
 	}
 
 	type _test struct {
@@ -62,7 +61,6 @@ func TestBoxDecode(t *testing.T) {
 		{
 			Input: input{
 				Hash: "c8rcgze421mw",
-				Pres: 12,
 			},
 			Expected: expected{
 				Lat: 46.755460,
@@ -73,7 +71,6 @@ func TestBoxDecode(t *testing.T) {
 		{
 			Input: input{
 				Hash: "c8rcgze42",
-				Pres: 9,
 			},
 			Expected: expected{
 				Lat: 46.7555,
@@ -84,7 +81,6 @@ func TestBoxDecode(t *testing.T) {
 		{
 			Input: input{
 				Hash: "c8rcgze",
-				Pres: 9,
 			},
 			Expected: expected{
 				Lat: 46.76,
@@ -95,7 +91,7 @@ func TestBoxDecode(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		b := Decode(test.Input.Hash, test.Input.Pres)
+		b := Decode(test.Input.Hash)
 		if dif := math.Abs(b.Lat() - test.Expected.Lat); dif > test.Tolerance {
 			t.Fatalf("Expected %f, %f got %f, %f", test.Expected.Lat, test.Expected.Lon, b.Lat(), b.Lon())
 		}
@@ -108,7 +104,6 @@ func TestBoxDecode(t *testing.T) {
 func TestBoxNeighbors(t *testing.T) {
 	type input struct {
 		hash string
-		pres int
 	}
 
 	tests := []struct {
@@ -119,7 +114,6 @@ func TestBoxNeighbors(t *testing.T) {
 		{
 			input: input{
 				hash: "de30ds",
-				pres: 6,
 			},
 			want: []*Box{
 				&Box{
@@ -161,7 +155,6 @@ func TestBoxNeighbors(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			b := Decode(
 				tt.input.hash,
-				tt.input.pres,
 			)
 
 			got := b.Neighbors()
