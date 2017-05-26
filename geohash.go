@@ -114,7 +114,7 @@ func Encode(lat, lon float64, pres int) *Box {
 		}
 	}
 
-	return &Box{hash: hash, maxLat: lat1, minLat: lat0, maxLon: lon1, minLon: lon0}
+	return &Box{hash: hash, maxLat: lat1, minLat: lat0, maxLon: lon1, minLon: lon0, pres: pres}
 }
 
 // Lat returns the latitude of a box
@@ -166,7 +166,6 @@ func (b Box) Neighbors() []*Box {
 func (b Box) String() string {
 	return b.hash
 }
-
 
 // Hash returns the geohash
 func (b Box) Hash() string {
