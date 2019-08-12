@@ -6,7 +6,7 @@ Example
 ```go
 package main
 
-import "github.com/vectorhacker/geohash"
+import "github.com/vectorhacker/go.geohash"
 
 func main() {
   box := geohash.Encode(46.7666, -101.4650, 0) // 0 is the same as full presicion
